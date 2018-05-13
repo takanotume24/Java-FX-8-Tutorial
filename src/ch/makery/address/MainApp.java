@@ -32,16 +32,19 @@ public class MainApp extends Application {
     }
 
     /**
+     * ルートレイアウトを初期化します。
      * Initializes the root layout.
      */
     public void initRootLayout() {
         try {
             // Load root layout from fxml file.
+        	// ルートレイアウトをFXMLファイルから読み込む。
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
+            // ルートレイアウトを含むシーンを表示します。
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -51,22 +54,23 @@ public class MainApp extends Application {
     }
 
     /**
-     * Shows the person overview inside the root layout.
-     */
-    /**
+     * 人物概要をルートレイアウト内に表示します。
      * Shows the person overview inside the root layout.
      */
     public void showPersonOverview() {
         try {
             // Load person overview.
+        	// personの概要を読み込む。
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
+            // person Overviewをルートレイアウトの中心に設定する。
             rootLayout.setCenter(personOverview);
 
             // Give the controller access to the main app.
+            // コントローラにメインアプリへのアクセス権を与えます。
             PersonOverviewController controller = loader.getController();
             controller.setMainApp(this);
 
@@ -76,6 +80,7 @@ public class MainApp extends Application {
     }
 
     /**
+     * メインステージを返します。
      * Returns the main stage.
      * @return
      */
@@ -91,11 +96,13 @@ public class MainApp extends Application {
     // ... AFTER THE OTHER VARIABLES ...
 
     /**
+     * 人の観察可能なリストとしてのデータ。
      * The data as an observable list of Persons.
      */
     private ObservableList<Person> personData = FXCollections.observableArrayList();
 
     /**
+     * コンストラクタ
      * Constructor
      */
     public MainApp() {
@@ -112,6 +119,7 @@ public class MainApp extends Application {
     }
 
     /**
+     * 観測可能なPersonのリストとしてデータを返します。
      * Returns the data as an observable list of Persons. 
      * @return
      */
@@ -122,6 +130,7 @@ public class MainApp extends Application {
     // ... THE REST OF THE CLASS ...
     
     /**
+     * 指定した人物の詳細を編集するためのダイアログを開きます。 ユーザーが[OK]をクリックすると、変更が提供されたpersonオブジェクトに保存され、trueが返されます。
      * Opens a dialog to edit details for the specified person. If the user
      * clicks OK, the changes are saved into the provided person object and true
      * is returned.
@@ -132,11 +141,14 @@ public class MainApp extends Application {
     public boolean showPersonEditDialog(Person person) {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
+        	//  fxmlファイルを読み込み、ポップアップダイアログの新しいステージを作成します。
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/PersonEditDialog.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
 
             // Create the dialog Stage.
+            // ダイアログステージを作成します。
+
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Edit Person");
             dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -145,11 +157,13 @@ public class MainApp extends Application {
             dialogStage.setScene(scene);
 
             // Set the person into the controller.
+            // コントローラーにpersonを設定します。
             PersonEditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setPerson(person);
 
             // Show the dialog and wait until the user closes it
+            // ダイアログを表示し、ユーザーが閉じるまで待ちます
             dialogStage.showAndWait();
 
             return controller.isOkClicked();

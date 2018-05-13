@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
+ * 人の詳細を編集するためのダイアログ。
  * Dialog to edit details of a person.
  * 
  * @author Marco Jakob
@@ -34,6 +35,7 @@ public class PersonEditDialogController {
     private boolean okClicked = false;
 
     /**
+     * コントローラクラスを初期化します。 このメソッドは、fxmlファイルがロードされた後に自動的に呼び出されます。
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
@@ -42,6 +44,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     * このダイアログのステージを設定します。
      * Sets the stage of this dialog.
      * 
      * @param dialogStage
@@ -51,6 +54,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     * ダイアログで編集する人物を設定します。
      * Sets the person to be edited in the dialog.
      * 
      * @param person
@@ -68,6 +72,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     * ユーザがOKをクリックした場合はtrueを返し、そうでない場合はfalseを返します。
      * Returns true if the user clicked OK, false otherwise.
      * 
      * @return
@@ -77,6 +82,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     *  ユーザーが[OK]をクリックすると呼び出されます。
      * Called when the user clicks ok.
      */
     @FXML
@@ -95,6 +101,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     * ユーザーがキャンセルをクリックすると呼び出されます。
      * Called when the user clicks cancel.
      */
     @FXML
@@ -103,6 +110,7 @@ public class PersonEditDialogController {
     }
 
     /**
+     * テキストフィールドのユーザー入力を検証します。
      * Validates the user input in the text fields.
      * 
      * @return true if the input is valid
@@ -124,6 +132,7 @@ public class PersonEditDialogController {
             errorMessage += "No valid postal code!\n"; 
         } else {
             // try to parse the postal code into an int.
+        	// postal code(郵便番号)をintに変換してみる
             try {
                 Integer.parseInt(postalCodeField.getText());
             } catch (NumberFormatException e) {
@@ -147,6 +156,7 @@ public class PersonEditDialogController {
             return true;
         } else {
             // Show the error message.
+        	// エラーメッセージを表示
             Alert alert = new Alert(AlertType.ERROR);
             alert.initOwner(dialogStage);
             alert.setTitle("Invalid Fields");

@@ -32,9 +32,11 @@ public class PersonOverviewController {
 	private Label birthdayLabel;
 
 	// Reference to the main application.
+	// 主なアプリケーションへの参照。
 	private MainApp mainApp;
 
 	/**
+	 * コンストラクタはinitialize（）メソッドの前に呼び出されます。
 	 * The constructor.
 	 * The constructor is called before the initialize() method.
 	 */
@@ -42,26 +44,31 @@ public class PersonOverviewController {
 	}
 
 	/**
+	 * コントローラクラスを初期化します。 このメソッドは、fxmlファイルがロードされた後に自動的に呼び出されます。
 	 * Initializes the controller class. This method is automatically called
 	 * after the fxml file has been loaded.
 	 */
 	@FXML
 	private void initialize() {
 	    // Initialize the person table with the two columns.
+		// 人のテーブルを2つの列で初期化します。
 	    firstNameColumn.setCellValueFactory(
 	            cellData -> cellData.getValue().firstNameProperty());
 	    lastNameColumn.setCellValueFactory(
 	            cellData -> cellData.getValue().lastNameProperty());
 
 	    // Clear person details.
+	    // Personの詳細をクリア
 	    showPersonDetails(null);
 
 	    // Listen for selection changes and show the person details when changed.
+	    // 選択の変更を聞き、変更されたときにその人の詳細を表示します。
 	    personTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> showPersonDetails(newValue));
 	}
 	
 	/**
+	 * メインアプリケーションによって呼び出され、自身に参照を戻します。
 	 * Is called by the main application to give a reference back to itself.
 	 * 
 	 * @param mainApp
@@ -70,10 +77,12 @@ public class PersonOverviewController {
 		this.mainApp = mainApp;
 
 		// Add observable list data to the table
+		// 観察可能なリストデータをテーブルに追加する
 		personTable.setItems(mainApp.getPersonData());
 	}
 
 	/**
+	 * すべてのテキストフィールドを塗りつぶして、その人の詳細を表示します。指定されたpersonがnullの場合、すべてのテキストフィールドがクリアされます。
 	 * Fills all text fields to show details about the person.
 	 * If the specified person is null, all text fields are cleared.
 	 * 
@@ -82,6 +91,7 @@ public class PersonOverviewController {
 	private void showPersonDetails(Person person) {
 		if (person != null) {
 			// Fill the labels with info from the person object.
+			// personオブジェクトからの情報でラベルを埋めます。
 			firstNameLabel.setText(person.getFirstName());
 			lastNameLabel.setText(person.getLastName());
 			streetLabel.setText(person.getStreet());
@@ -89,10 +99,12 @@ public class PersonOverviewController {
 			cityLabel.setText(person.getCity());
 
 			// TODO: We need a way to convert the birthday into a String! 
+			// TODO：誕生日をStringに変換する方法が必要です。
 			// birthdayLabel.setText(...);
 			birthdayLabel.setText(DateUtil.format(person.getBirthday()));
 		} else {
 			// Person is null, remove all the text.
+			// Personがnullの場合は、すべてのテキストを削除します。
 			firstNameLabel.setText("");
 			lastNameLabel.setText("");
 			streetLabel.setText("");
@@ -103,6 +115,7 @@ public class PersonOverviewController {
 	}
 
 	/**
+	 * ユーザーが削除ボタンをクリックすると呼び出されます。
 	 * Called when the user clicks on the delete button.
 	 */
 	@FXML
@@ -112,6 +125,7 @@ public class PersonOverviewController {
 	        personTable.getItems().remove(selectedIndex);
 	    } else {
 	        // Nothing selected.
+	    	// 何も選択されていないとき
 	        Alert alert = new Alert(AlertType.WARNING);
 	        alert.initOwner(mainApp.getPrimaryStage());
 	        alert.setTitle("No Selection");
@@ -123,6 +137,7 @@ public class PersonOverviewController {
 	}
 	
 	/**
+	 * ユーザーが新しいボタンをクリックすると呼び出されます。 新しい人物の詳細を編集するためのダイアログを開きます。
 	 * Called when the user clicks the new button. Opens a dialog to edit
 	 * details for a new person.
 	 */
@@ -136,6 +151,7 @@ public class PersonOverviewController {
 	}
 
 	/**
+	 * ユーザーが編集ボタンをクリックすると呼び出されます。 選択した人物の詳細を編集するためのダイアログを開きます。
 	 * Called when the user clicks the edit button. Opens a dialog to edit
 	 * details for the selected person.
 	 */
@@ -150,6 +166,7 @@ public class PersonOverviewController {
 
 	    } else {
 	        // Nothing selected.
+	    	// 何も選択されていないとき
 	        Alert alert = new Alert(AlertType.WARNING);
 	        alert.initOwner(mainApp.getPrimaryStage());
 	        alert.setTitle("No Selection");
