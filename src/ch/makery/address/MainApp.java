@@ -2,8 +2,14 @@ package ch.makery.address;
 
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import ch.makery.address.model.Person;
+import ch.makery.address.util.Data;
+import ch.makery.address.util.Sql;
 import ch.makery.address.view.PersonEditDialogController;
 import ch.makery.address.view.PersonOverviewController;
 import javafx.application.Application;
@@ -20,6 +26,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    Data data;
 
     @Override
     public void start(Stage primaryStage) {
@@ -79,6 +86,8 @@ public class MainApp extends Application {
         }
     }
 
+
+
     /**
      * メインステージを返します。
      * Returns the main stage.
@@ -91,7 +100,7 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 
     // ... AFTER THE OTHER VARIABLES ...
 
@@ -107,34 +116,49 @@ public class MainApp extends Application {
      */
     public MainApp() {
         // Add some sample data
-        personData.add(new Person("Hans", "Muster"));
-        personData.add(new Person("Ruth", "Mueller"));
-        personData.add(new Person("Heinz", "Kurz"));
-        personData.add(new Person("Cornelia", "Meier"));
-        personData.add(new Person("Werner", "Meyer"));
-        personData.add(new Person("Lydia", "Kunz"));
-        personData.add(new Person("Anna", "Best"));
-        personData.add(new Person("Stefan", "Meier"));
-        personData.add(new Person("Martin", "Mueller"));
+//        personData.add(new Person("Hans", "Muster"));
+//        personData.add(new Person("Ruth", "Mueller"));
+//        personData.add(new Person("Heinz", "Kurz"));
+//        personData.add(new Person("Cornelia", "Meier"));
+//        personData.add(new Person("Werner", "Meyer"));
+//        personData.add(new Person("Lydia", "Kunz"));
+//        personData.add(new Person("Anna", "Best"));
+//        personData.add(new Person("Stefan", "Meier"));
+//        personData.add(new Person("Martin", "Mueller"));
     }
 
     /**
      * 観測可能なPersonのリストとしてデータを返します。
-     * Returns the data as an observable list of Persons. 
-     * @return
+     * Returns the data as an observable list of Persons.
+     * @return ObservableList Person
      */
-    public ObservableList<Person> getPersonData() {
+    public ObservableList<Person> getPersonData(Data data) {
+		try (Connection connection = DriverManager.getConnection(Sql.url,Sql.user,Sql.password);
+				java.sql.Statement statement =connection.createStatement();
+			){
+			personData.clear();
+			ResultSet resultSet = statement.executeQuery(data.sqlStr);
+			while(resultSet.next()){
+				personData.add(new Person(resultSet.getString("firstName"), resultSet.getString("lastName"), resultSet.getString("street"), resultSet.getString("city"), resultSet.getInt("postalCode")));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			System.out.println("クエリの中身が空");
+			e.printStackTrace();
+		}
         return personData;
     }
 
     // ... THE REST OF THE CLASS ...
-    
+
     /**
      * 指定した人物の詳細を編集するためのダイアログを開きます。 ユーザーが[OK]をクリックすると、変更が提供されたpersonオブジェクトに保存され、trueが返されます。
      * Opens a dialog to edit details for the specified person. If the user
      * clicks OK, the changes are saved into the provided person object and true
      * is returned.
-     * 
+     *
      * @param person the person object to be edited
      * @return true if the user clicked OK, false otherwise.
      */
@@ -172,5 +196,5 @@ public class MainApp extends Application {
             return false;
         }
     }
-    
+
 }

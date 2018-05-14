@@ -32,7 +32,7 @@ public class Person {
 
     /**
      * Constructor with some initial data.
-     * 
+     *
      * @param firstName
      * @param lastName
      */
@@ -44,6 +44,24 @@ public class Person {
         this.street = new SimpleStringProperty("some street");
         this.postalCode = new SimpleIntegerProperty(1234);
         this.city = new SimpleStringProperty("some city");
+        this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+    }
+
+    /**
+     * 引数で初期化するコンストラクタ
+     * @param firstName String型
+     * @param lastName String型
+     * @param street String型
+     * @param postalCode int型
+     * @param city String型
+     * @param birthday LocalData型
+     */
+    public Person(String firstName, String lastName, String street, String city, int postalCode) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.street = new SimpleStringProperty(street);
+        this.postalCode = new SimpleIntegerProperty(postalCode);
+        this.city = new SimpleStringProperty(city);
         this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
     }
 

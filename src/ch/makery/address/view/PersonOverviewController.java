@@ -2,6 +2,7 @@ package ch.makery.address.view;
 
 import ch.makery.address.MainApp;
 import ch.makery.address.model.Person;
+import ch.makery.address.util.Data;
 import ch.makery.address.util.DateUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -35,6 +36,11 @@ public class PersonOverviewController {
 	// 主なアプリケーションへの参照。
 	private MainApp mainApp;
 
+	//起動直後用にすべて表示するため
+	Data data = new Data("SELECT * FROM addressApp");
+
+
+
 	/**
 	 * コンストラクタはinitialize（）メソッドの前に呼び出されます。
 	 * The constructor.
@@ -66,26 +72,25 @@ public class PersonOverviewController {
 	    personTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> showPersonDetails(newValue));
 	}
-	
+
 	/**
 	 * メインアプリケーションによって呼び出され、自身に参照を戻します。
 	 * Is called by the main application to give a reference back to itself.
-	 * 
+	 *
 	 * @param mainApp
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
-
 		// Add observable list data to the table
 		// 観察可能なリストデータをテーブルに追加する
-		personTable.setItems(mainApp.getPersonData());
+		personTable.setItems(mainApp.getPersonData(data));
 	}
 
 	/**
 	 * すべてのテキストフィールドを塗りつぶして、その人の詳細を表示します。指定されたpersonがnullの場合、すべてのテキストフィールドがクリアされます。
 	 * Fills all text fields to show details about the person.
 	 * If the specified person is null, all text fields are cleared.
-	 * 
+	 *
 	 * @param person the person or null
 	 */
 	private void showPersonDetails(Person person) {
@@ -97,10 +102,6 @@ public class PersonOverviewController {
 			streetLabel.setText(person.getStreet());
 			postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
 			cityLabel.setText(person.getCity());
-
-			// TODO: We need a way to convert the birthday into a String! 
-			// TODO：誕生日をStringに変換する方法が必要です。
-			// birthdayLabel.setText(...);
 			birthdayLabel.setText(DateUtil.format(person.getBirthday()));
 		} else {
 			// Person is null, remove all the text.
@@ -135,7 +136,7 @@ public class PersonOverviewController {
 	        alert.showAndWait();
 	    }
 	}
-	
+
 	/**
 	 * ユーザーが新しいボタンをクリックすると呼び出されます。 新しい人物の詳細を編集するためのダイアログを開きます。
 	 * Called when the user clicks the new button. Opens a dialog to edit
@@ -146,7 +147,8 @@ public class PersonOverviewController {
 	    Person tempPerson = new Person();
 	    boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
 	    if (okClicked) {
-	        mainApp.getPersonData().add(tempPerson);
+	    	//TODO ここで.add()してもしょうがない、DBに書き込むタイミングは？
+			mainApp.getPersonData(data).add(tempPerson);
 	    }
 	}
 
@@ -176,5 +178,5 @@ public class PersonOverviewController {
 	        alert.showAndWait();
 	    }
 	}
-	
+
 }
