@@ -197,4 +197,12 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * 変更を加えた後、リストの中身を更新する。
+     * @param list
+     */
+    public void refreshList(ObservableList<Person> list) {
+    	list.size();
+    }
+
 }

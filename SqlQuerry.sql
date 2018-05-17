@@ -10,4 +10,5 @@ SELECT * FROM addressApp
 SELECT * FROM addressApp WHERE firstName = "user" ORDER BY firstName asc
 SELECT * FROM addressApp WHERE firstName = "*" ORDER BY firstName asc
 INSERT INTO addressApp (firstName,lastName,street,city,postalCode) VALUES("test","takuya","sampleStreet","sampleCity",123);
+DELETE FROM addressApp WHERE firstName = "user" and lastName = "takuya";
 

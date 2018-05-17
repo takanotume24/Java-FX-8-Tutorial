@@ -4,6 +4,7 @@ import ch.makery.address.MainApp;
 import ch.makery.address.model.Person;
 import ch.makery.address.util.Data;
 import ch.makery.address.util.DateUtil;
+import ch.makery.address.util.Sql;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -122,8 +123,11 @@ public class PersonOverviewController {
 	@FXML
 	private void handleDeletePerson() {
 	    int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
+	    Person tempPerson = personTable.getItems().get(selectedIndex);
 	    if (selectedIndex >= 0) {
-	        personTable.getItems().remove(selectedIndex);
+	    	Sql.action(Sql.createQuerryDELETE(tempPerson));
+	    	mainApp.refreshList(mainApp.getPersonData(data));
+//	        personTable.getItems().remove(selectedIndex);
 	    } else {
 	        // Nothing selected.
 	    	// 何も選択されていないとき
@@ -148,7 +152,8 @@ public class PersonOverviewController {
 	    boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
 	    if (okClicked) {
 	    	//TODO ここで.add()してもしょうがない、DBに書き込むタイミングは？
-			mainApp.getPersonData(data).add(tempPerson);
+	    	Sql.action(Sql.createQuerryINSERT(tempPerson));
+			mainApp.refreshList(mainApp.getPersonData(data));
 	    }
 	}
 
